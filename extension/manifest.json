@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "EduSign",
+  "version": "1.0",
+  "description": "A extension that may help ......",
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "icons/logo_icon.png"
+  },
+  "icons": {
+    "16": "icons/logo_icon.png",
+    "48": "icons/logo_icon.png",
+    "128": "icons/logo_icon.png"
+  },
+  "permissions": [
+    "storage", "contextMenus", "activeTab", "scripting"
+  ]
+  
+}
