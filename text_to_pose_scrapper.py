@@ -15,14 +15,15 @@ time.sleep(5)
 
 # Enter text in the input field
 input_field = browser.find_element(By.XPATH, '//*[@id="desktop"]')
-text = "Hello, how are you? I am fine. Tell me about your day. How was it?"
+text = "Hello, how are you? I am fine."
 input_field.send_keys(text)
 
 # Wait for the video to load
-time.sleep(1000)
+time.sleep(240)
 
 # Find the video element and download it
-video = browser.find_element(By.XPATH, '//*[@id="content"]/app-spoken-to-signed/app-signed-language-output/video')
+video = browser.find_element(
+    By.XPATH, '//*[@id="content"]/app-spoken-to-signed/app-signed-language-output/video')
 video_url = video.get_attribute('src')
 
 # Download the video
