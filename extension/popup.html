@@ -9,6 +9,11 @@
 <body>
   <h1>Welcome to EduSign</h1>
   <img src="icons/logo_icon.png" alt="EduSign Logo" width="128">
-  <button onclick="alert('Button clicked!')" style="border-radius: 15px; background-color: rgb(170, 211, 211); color: white; padding: 10px 20px; border: none; cursor: pointer; transition: background-color 0.3s;"><img src="icons\logo_icon.png" alt="Icon" style="width: 16px; height: 16px;">Transcribe </button>
+  <div class="container"></div>
+            <button class="btn btn-shine" id="extract">Extract Transcript</button>
+            <textarea id="transcript" rows="20" cols="32" readonly> RedWriter: Transcript Extractor</textarea>
+            <button class="btn btn-gradients" id="copy-all">Copy All</button>
+  </div>
+  <script src="popup.js"></script>
 </body>
 </html>

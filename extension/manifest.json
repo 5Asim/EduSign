@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "EduSign",
   "version": "1.0",
-  "description": "A extension that may help ......",
+  "description": "A extension that may help transcribe the youtube video",
   "background": {
     "service_worker": "background.js"
   },
@@ -16,7 +16,13 @@
     "128": "icons/logo_icon.png"
   },
   "permissions": [
-    "storage", "contextMenus", "activeTab", "scripting"
+    "storage",
+    "contextMenus",
+    "activeTab",
+    "scripting",
+    "tabs"
+  ],
+  "host_permissions": [
+    "https://www.youtube.com/*"
   ]
-  
 }
