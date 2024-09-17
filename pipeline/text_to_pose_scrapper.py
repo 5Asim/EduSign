@@ -20,7 +20,7 @@ text = "Hello, how are you? I am fine."
 input_field.send_keys(text)
 
 # Wait for the video to load
-time.sleep(100)
+time.sleep(1000)
 
 # Find the video element and download it
 video = browser.find_element(
