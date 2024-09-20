@@ -49,3 +49,70 @@ async function sendTranscriptToServer(transcript) {
     return false; // Indicate failure
   }
 }
+
+let video;
+let model;
+let canvas;
+let ctx;
+
+document.addEventListener('DOMContentLoaded', function() {
+  const startButton = document.getElementById('startCamersa');
+  video = document.getElementById('video');
+  const cameraContainer = document.getElementById('cameraContainer');
+  const resultDiv = document.getElementById('result');
+  canvas = document.getElementById('canvas');
+  ctx = canvas.getContext('2d');
+
+  startButton.addEventListener('click', startCamera);
+
+  async function startCamera() {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      video.srcObject = stream;
+      cameraContainer.classList.remove('hidden');
+      startButton.classList.add('hidden');
+      await loadModel();
+      processVideoFrames();
+    } catch (err) {
+      console.error("Error accessing the camera: ", err);
+      resultDiv.textContent = "Error accessing the camera. Please make sure you've granted camera permissions.";
+    }
+  }
+
+  async function loadModel() {
+    try {
+      // Replace 'model_url' with the actual URL or path to your converted TensorFlow.js model
+      model = await tf.loadLayersModel('model_url');
+      console.log('Model loaded successfully');
+    } catch (err) {
+      console.error('Failed to load model:', err);
+    }
+  }
+
+  function preprocessFrame(videoFrame) {
+    return tf.tidy(() => {
+      const tfImg = tf.browser.fromPixels(videoFrame).resizeBilinear([224, 224]);
+      const normalizedImg = tfImg.div(tf.scalar(255));
+      return normalizedImg.expandDims(0);
+    });
+  }
+
+  async function predict() {
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    const tfImg = preprocessFrame(canvas);
+    const prediction = await model.predict(tfImg);
+    const classIndex = prediction.argMax(1).dataSync()[0];
+    // Replace this with your actual class mapping
+    const classNames = ['Class 0', 'Class 1', 'Class 2']; // Add all your classes
+    resultDiv.textContent = `Detected Sign: ${classNames[classIndex]}`;
+    tfImg.dispose();
+    prediction.dispose();
+  }
+
+  function processVideoFrames() {
+    if (video.readyState === video.HAVE_ENOUGH_DATA) {
+      predict();
+    }
+    requestAnimationFrame(processVideoFrames);
+  }
+});
