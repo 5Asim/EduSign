@@ -3,13 +3,27 @@
 <head>
   <title>EduSign Popup</title>
   <style>
-    body { text-align: center; }
+    body { 
+      text-align: center; 
+      font-family: 'Poppins', sans-serif;
+    }
+    .hidden {
+      display: none;
+    }
   </style>
   <link rel="stylesheet" href="popup.css">
   <link href="https://fonts.googleapis.com/css?family=Poppins&display=swap" rel="stylesheet">  
 </head>
 <body>
-  <button class="card" id="extract">Welcome To EduSign</button>
+  <h1>Welcome To EduSign</h1>
+  <!-- <button class="card" id="extract">Extract</button> -->
+  <button class="card" id="startCamera">Start Camera</button>
+  <div id="cameraContainer" class="hidden">
+    <video id="video" width="640" height="480" autoplay></video>
+    <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
+    <div id="result" class="result-box"></div>
+  </div>
+  
   <script src="popup.js"></script>
 </body>
 </html>
