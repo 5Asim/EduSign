@@ -1,34 +1,38 @@
 document.getElementById("extract").addEventListener("click", async () => {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
+  // Execute content.js to set up the page
   chrome.scripting.executeScript(
     {
       target: { tabId: tab.id },
       files: ["content.js"],
     },
-    ([result]) => {
-      document.getElementById("transcript").value = result.result;
+    async () => {
+      // Request the transcript after executing content.js
+      chrome.tabs.sendMessage(tab.id, { action: "extractTranscript" }, async (transcriptResponse) => {
+        if (transcriptResponse && transcriptResponse.transcript) {
+          const success = await sendTranscriptToServer(transcriptResponse.transcript); // Send transcript to the server
+
+          // Create the overlay only if sending the transcript was successful
+          if (success) {
+            chrome.tabs.sendMessage(tab.id, { action: "showOverlay" });
+          }
+        } else {
+          console.error("Failed to extract transcript:", transcriptResponse.transcript);
+        }
+      });
     }
   );
 });
 
-document.getElementById("copy-all").addEventListener("click", async () => {
-  const transcriptTextarea = document.getElementById("transcript");
-  transcriptTextarea.select();
-
-  try {
-    await navigator.clipboard.writeText(transcriptTextarea.value);
-  } catch (err) {
-    console.error("Failed to copy the transcript: ", err);
-  }
-});
-
 async function sendTranscriptToServer(transcript) {
   try {
-    const response = await fetch("localhost:5100/postTranscibedData", {
-      method: "POST", // Specify the method as POST
+    console.log("Sending transcript to server:", transcript); // Log the transcript data
+
+    const response = await fetch("http://localhost:5000/api/transcript", {
+      method: "POST",
       headers: {
-        "Content-Type": "application/json", // Specify the content type as JSON
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ transcript: transcript }), // Send the transcript data as JSON
     });
@@ -39,7 +43,9 @@ async function sendTranscriptToServer(transcript) {
 
     const responseData = await response.json();
     console.log("Successfully sent transcript to server:", responseData);
+    return true; // Indicate success
   } catch (error) {
     console.error("Failed to send transcript to server:", error);
+    return false; // Indicate failure
   }
 }
