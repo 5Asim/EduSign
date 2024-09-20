@@ -3,38 +3,32 @@ import base64
 import requests
 import os
 
-STABLE_DIFFUSION_API_URL = "https://stable-diffusion-api-url.com/generate"
+STABLE_DIFFUSION_API_URL = "https://api.stability.ai/v2beta/stable-image/control/structure"
 
 # API key if needed
 API_KEY = ''  # Optional, depending on the API you're using
-
-# Headers (Add authorization if the API requires it)
-headers = {
-    'Authorization': f'Bearer {API_KEY}',  # Optional if your API uses Bearer tokens
-    'Content-Type': 'application/json'
-}
 
 def call_stable_diffusion_api(image_path):
     """
     Call the Stable Diffusion API with the pose image.
     """
     response = requests.post(
-        STABLE_DIFFUSION_API_URL,
+        f"https://api.stability.ai/v2beta/stable-image/control/structure",
         headers={
-            "authorization": f"Bearer " + API_KEY,
+            "authorization": f"Bearer {API_KEY}",
             "accept": "image/*"
         },
         files={
-            "image": open("./.png", "rb")
+            "image": open("./frames/initial/image1.png", "rb")
         },
         data={
-            "prompt": "a majestic portrait of a chicken",
-            "output_format": "webp"
+            "prompt": "Human face of Brad Pitt in the sign language pose given by the image",
+            "output_format": "png"
         },
     )
 
     if response.status_code == 200:
-        with open("./" + image_path, 'wb') as file:
+        with open("./frames/final/image1.png", 'wb') as file:
             file.write(response.content)
     else:
         raise Exception(str(response.json()))    
@@ -73,3 +67,6 @@ output_folder_path = './frames/final' # Output folder for generated human images
 
 # Start processing
 process_folder(input_folder_path, output_folder_path)
+
+# if __name__ == '__main__':
+#     call_stable_diffusion_api("image1.png")
