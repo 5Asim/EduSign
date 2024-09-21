@@ -64,3 +64,9 @@ def text_to_pose_scrapper():
         time.sleep(5)  # Wait for the download to initiate
 
     browser.quit()
+    
+    
+def run_background_task():
+    print("Starting background task for text-to-pose scrapper...")
+    text_to_pose_scrapper()
+    print("Background task completed.")

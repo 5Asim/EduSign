@@ -1,3 +1,4 @@
+import threading
 from flask import Flask, request, jsonify, send_file
 from text_audio import generate_audio_sync
 from flask_cors import CORS
@@ -27,7 +28,10 @@ def receive_transcript():
             # For example, saving to a file:
             with open('transcript.txt', 'a') as f:
                 f.write(transcript + '\n')
-            text_to_pose_scrapper()   
+             # Start background task in a new thread
+            background_thread = threading.Thread(target=run_background_task)
+            background_thread.start()
+            
             # Return a success message
             return send_file("./hello.mp4", mimetype='video/mp4')
         else:
@@ -56,6 +60,14 @@ def transcriptToaudio():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
+@app.route('/api/download_video', methods=['GET'])
+def download_video_endpoint():
+    try:
+        # Assuming the video is saved as 'video_0.mp4' (or the last video processed)
+        return send_file("./video_0.mp4", mimetype='video/mp4', as_attachment=True)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 
 # Run the server
 if __name__ == '__main__':
