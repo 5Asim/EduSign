@@ -11,8 +11,7 @@ body {
   margin: 0; /* Remove default margin */
   height: 100vh; /* Set height to 100% of the viewport */
   display: flex;
-  justify-content: center;
-  align-items: center;
+ 
   overflow: hidden; /* Prevent scrolling if needed */
 }
 
@@ -51,8 +50,17 @@ hr {
 /* Button container styling */
 .buttons {
   display: flex;
-  justify-content: space-evenly;
-  gap: 5px;
+  flex-direction: row; /* Use flexbox to align buttons in a row */
+  justify-content: space-between; /* Space evenly between buttons */
+  align-items: center; /* Center align buttons vertically */
+   /* Add spacing above buttons */
+
+}
+
+.setting {
+  position: absolute;
+  top: 10px; /* Adjust the distance from the top */
+  right: 10px; /* Adjust the distance from the right */
 }
 
 /* Button (option) styling */

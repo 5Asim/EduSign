@@ -28,7 +28,11 @@
   </style>
 </head>
 <body>
+  
     <div class="popup">
+      <div class="setting">
+        <img src="./icons/settings.png" alt="" width="20" height="20">
+      </div>
       <div class="logo">
         <img src="./icons/EduSign_letter.png" width="100" height="100">
       </div>
@@ -38,16 +42,25 @@
       <div>
         <hr>
       </div>
-      <div class="buttons">
+
+      <div class="camera_buttons">
+
+        <div class="option" id="extract">
+          <img src="./icons/Sign.png" alt="" width="30" height="30">
+          <p>Sign Language</p>
+        </div>
+
         <div class="option" id="askQuestionButton">
           <img src="./icons/Ask.png" alt="" width="30" height="30">
           <p>Ask Question</p>
         </div>
+
         <div class="option">
           <img src="./icons/web.png" alt="" width="30" height="30">
-          <p>Want to Know More</p>
+          <p>Know More!</p>
         </div>
       </div>
+      
     </div>
 
     <div class="camera" style="display: none;">
@@ -57,6 +70,7 @@
       <div class="camera_body">
         <p class="word">Recognized Word: <span class="word_recognized" id="extension-recognized-word">No word recognized</span></h3>
           <div class="camera_buttons">
+            
             <div class="option" id="extension-copy-btn">
               <img src="./icons/copy.png" alt="Copy Icon" width="30" height="30">
               <p>Copy</p>

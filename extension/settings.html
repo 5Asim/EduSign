@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hearing Impairment Configuration</title>
+  <link href="https://fonts.googleapis.com/css?family=Poppins&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Configure Your Hearing Profile</h1>
+    
+    <form id="configForm">
+      <!-- Individual Level of Hearing -->
+      <div class="setting">
+        <label for="hearingLevel">Level of Hearing Impairment:</label>
+        <input type="range" id="hearingLevel" name="hearingLevel" min="1" max="5" value="1">
+        <span id="hearingLevelValue">1</span>
+      </div>
+
+      <!-- Comprehensibility Testing -->
+      <div class="setting">
+        <label for="comprehension">Comprehensibility:</label>
+        <select id="comprehension" name="comprehension">
+          <option value="low">Low</option>
+          <option value="moderate">Moderate</option>
+          <option value="high">High</option>
+        </select>
+        <button class="btn-test" onclick="startTest()">Unsure? Take a test now</button>
+
+    <script>
+        // Update slider label dynamically as the user adjusts it
+        document.getElementById('comprehensionLevel').oninput = function() {
+            document.getElementById('levelLabel').textContent = `Current Level: ${this.value}`;
+        };
+
+        // Redirect to the comprehension test page
+        function startTest() {
+            window.location.href = "comprehension_test.html";
+        }
+
+        // On load, check if test results exist in localStorage and adjust the slider accordingly
+        window.onload = function() {
+            const testResults = JSON.parse(localStorage.getItem('testResults'));
+
+            if (testResults) {
+                let comprehensionLevel = 3; // default level
+
+                // Adjust comprehension level based on MCQs and GPT scoring
+                if (testResults.mcq == '2') { // Example: Correct answer for question 1
+                    comprehensionLevel++;
+                }
+
+                // Call the function to process short answer response and adjust the level
+                processShortAnswer(testResults.shortAnswer).then(level => {
+                    comprehensionLevel += level;
+                    document.getElementById('comprehensionLevel').value = comprehensionLevel;
+                    document.getElementById('levelLabel').textContent = `Current Level: ${comprehensionLevel}`;
+                });
+            }
+        };
+
+        async function processShortAnswer(answer) {
+            // This mockup processes short answers using an AI model like GPT-3.5
+            // Replace this API call with actual GPT-3.5 integration
+            const response = await fetch('https://api.openai.com/v1/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': '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'
+                },
+                body: JSON.stringify({
+                    model: 'text-davinci-003',
+                    prompt: `Evaluate this response for complexity and correctness: "${answer}"`,
+                    max_tokens: 10
+                })
+            });
+
+            const data = await response.json();
+            const gptScore = data.choices[0].text.trim();
+            return parseInt(gptScore);
+        }
+    </script>
+      </div>
+
+      <!-- Sign Language Literacy -->
+      <div class="setting">
+        <label for="signLiteracy">Sign Language Literacy:</label>
+        <input type="range" id="signLiteracy" name="signLiteracy" min="1" max="5" value="1">
+        <span id="signLiteracyValue">1</span>
+      </div>
+
+      <!-- Education Level -->
+      <div class="setting">
+        <label for="educationLevel">Education Level:</label>
+        <select id="educationLevel" name="educationLevel">
+          <option value="primary">Primary</option>
+          <option value="secondary">Secondary</option>
+          <option value="higher">Higher Education</option>
+        </select>
+      </div>
+
+      <!-- Age -->
+      <div class="setting">
+        <label for="age">Age:</label>
+        <input type="number" id="age" name="age" min="12" max="20" value="25">
+      </div>
+
+      <button type="submit">Save Settings</button>
+    </form>
+
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

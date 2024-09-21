@@ -1,8 +1,8 @@
 from flask import Flask, request, jsonify, send_file
-from text_audio import generate_audio_sync
+from pipeline.text_to_audio import generate_audio_sync
 from flask_cors import CORS
 from pipeline.text_to_pose_scrapper import text_to_pose_scrapper
-
+import os
 app = Flask(__name__)
 CORS(app)
 
@@ -25,7 +25,12 @@ def receive_transcript():
 
             # You can also save the transcript to a file, database, etc.
             # For example, saving to a file:
-            with open('transcript.txt', 'a') as f:
+            if os.path.exists('transcript.txt'):
+                os.remove('./transcript.txt')
+                print("File deleted successfully.")
+            else:
+                print("File does not exist.")
+            with open('transcript.txt', 'w') as f:
                 f.write(transcript + '\n')
             text_to_pose_scrapper()   
             # Return a success message
