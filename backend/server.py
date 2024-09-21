@@ -1,8 +1,9 @@
 import threading
 from flask import Flask, request, jsonify, send_file, render_template, Response
-from text_audio import generate_audio_sync
+from pipeline.text_to_audio import generate_audio_sync
 from flask_cors import CORS
 from pipeline.text_to_pose_scrapper import text_to_pose_scrapper, run_background_task
+import os
 
 import pickle
 import cv2
@@ -44,7 +45,7 @@ def receive_transcript():
             background_thread.start()
             
             # Return a success message
-            return send_file("./hello.mp4", mimetype='video/mp4')
+            return send_file("../pipeline/video_0.mp4", mimetype='video/mp4')
         else:
             return send_file("./hello.mp4", mimetype='video/mp4')
     except Exception as e:
@@ -69,7 +70,8 @@ def transcriptToaudio():
         else:
             return jsonify({"error": "No transcript provided"}), 400
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return jsonify({"error": str(e)}), 500# Convert to Audio:
+
     
 @app.route('/api/download_video', methods=['GET'])
 def download_video_endpoint():
@@ -81,7 +83,7 @@ def download_video_endpoint():
 
 
 # Load the model
-model_dict = pickle.load(open('./model.p', 'rb'))
+model_dict = pickle.load(open('./pipeline/model.p', 'rb'))
 model = model_dict['model']
 
 cap = cv2.VideoCapture(1)
@@ -175,27 +177,6 @@ def get_word():
     global predicted_word
     print(f"Current predicted word: {predicted_word}")
     return jsonify({"predicted_word": predicted_word})
-
-
-@app.route('/api/transcript/audio', methods=['POST'])
-def transcriptToaudio():
-    try:
-        # Get the JSON data from the request
-        data = request.get_json()
-
-        # Extract the transcript from the data
-        transcript = data.get('transcript')
-
-        if transcript:
-            # Call the function to generate audio
-            generate_audio_sync(transcript, VOICES[1])
-
-            # Send the audio file back to the client
-            return send_file("test.mp3", mimetype='audio/mp3')
-        else:
-            return jsonify({"error": "No transcript provided"}), 400
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
 
 # Run the server
 if __name__ == '__main__':

@@ -58,7 +58,7 @@ function createOverlay() {
     object-fit: cover;
   `;
   video.autoplay = true;
-  video.src = 'https://www.w3schools.com/html/mov_bbb.mp4'; // Replace with the actual URL of your sign language video
+  video.src = `./video_0.mp4`;  // Replace with the actual URL of your sign language video
 
   overlay.appendChild(video);
   videoPlayer.appendChild(overlay);

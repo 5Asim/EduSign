@@ -11,12 +11,13 @@ document.getElementById("extract").addEventListener("click", async () => {
       // Request the transcript after executing content.js
       chrome.tabs.sendMessage(tab.id, { action: "extractTranscript" }, async (transcriptResponse) => {
         if (transcriptResponse && transcriptResponse.transcript) {
-          const success = await sendTranscriptToServer(transcriptResponse.transcript); // Send transcript to the server
+          // const success = await sendTranscriptToServer(transcriptResponse.transcript); // Send transcript to the server
 
           // Create the overlay only if sending the transcript was successful
-          if (success) {
-            chrome.tabs.sendMessage(tab.id, { action: "showOverlay" });
-          }
+          chrome.tabs.sendMessage(tab.id, { action: "showOverlay" });
+          // if (success) {
+          //   chrome.tabs.sendMessage(tab.id, { action: "showOverlay" });
+          // }
         } else {
           console.error("Failed to extract transcript:", transcriptResponse.transcript);
         }

@@ -4,20 +4,30 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 import time
 import requests
+import os
+from selenium.webdriver.chrome.options import Options
 
-# Function to initialize the browser
-def init_browser():
-    browser = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
-    browser.get('https://sign.mt')
-    time.sleep(5)  # wait for the page to load
+def init_browser(download_folder):
+    chrome_options = Options()
+    chrome_options.add_experimental_option('prefs', {
+        "download.default_directory": download_folder,  # Set download directory
+        "download.prompt_for_download": False,  # Disable download prompt
+        "download.directory_upgrade": True,  # Allow directory upgrade
+        "safebrowsing.enabled": True  # Enable safe browsing
+    })
+    # Initialize the browser with the specified options
+    browser = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
+    browser.get('https://sign.mt')  # URL of the website being scraped
+    time.sleep(5)  # Wait for the page to load
     return browser
+
 
 def download_video(browser, video_index):
     # Enter text in the input field
     # Only give small inputs    
 
     # Wait for the video to load
-    time.sleep(500)
+    time.sleep(200)
     # Find the video element and download it
     video = browser.find_element(
         By.XPATH, '//*[@id="content"]/app-spoken-to-signed/app-signed-language-output/video')
@@ -50,9 +60,10 @@ def text_to_pose_scrapper():
     # Path to the file containing the text segments
     file_path = './transcript.txt'
     segments = read_text_segments(file_path)
-    
-    browser = init_browser()
 
+    current_folder = os.path.dirname(os.path.abspath(__file__))  # Get the current script's directory
+    browser = init_browser(current_folder)
+    
     for index, text in enumerate(segments):
         input_field = browser.find_element(By.XPATH, '//*[@id="desktop"]')
         input_field.clear()  # Clear any existing text
