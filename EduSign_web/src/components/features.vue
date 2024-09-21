@@ -1,68 +1,82 @@
 <template>
+	<div class="feature_page">
 	<div class="features">
-		<p class="heading">What's More!!!!!</p>
-	<div class="feature">
-		<Box 
-		heading="Career Opportunities" 
-		body="Showcase talents, gain hands-on experience, and develop crucial skills like problem-solving and teamwork for career success." 
-		src="./icons/logo.png" 
-		backgroundGradient="white" />
-		<BoxOutline 
-		heading="Career Opportunities" 
-		body="Showcase talents, gain hands-on experience, and develop crucial skills like problem-solving and teamwork for career success." 
-		src="./icons/logo.png" 
-		backgroundGradient="white" />
-		
+		<p class="font-bold text-6xl">Empowering Education Through Accessibility</p>
+		<p class="font-bold text-6xl">Making Learning Open to All</p>
+		<p class="text-xl font-normal py-8">We give a voice to the voiceless by translating educational materials for the deaf, ensuring equal access to knowledge and fostering inclusivity.</p>
 	</div>
-	<div class="feature">
-		<BoxOutline 
-		heading="Career Opportunities" 
-		body="Showcase talents, gain hands-on experience, and develop crucial skills like problem-solving and teamwork for career success." 
-		src="./icons/logo.png" 
-		backgroundGradient="white" />
-		<Box 
-		heading="Career Opportunities" 
-		body="Showcase talents, gain hands-on experience, and develop crucial skills like problem-solving and teamwork for career success." 
-		src="./icons/logo.png" 
-		backgroundGradient="white" />
-		
-		
+	<div class="flex flex-row items-center justify-center gap-8">
+		<Feature_box heading=" Real-time Sign-Language Translation" body="Showcase talents, gain hands-on experience, and develop crucial skills" bgcolor="rgba(94, 204, 160, 1)" :src="RealTime"/>
+		<Feature_box heading=" Cross platform integration" body="Showcase talents, gain hands-on experience, and develop crucial skills" bgcolor="rgba(10, 10, 10, 1)" textcolor="white" :src="social"/>
+		<Feature_box heading=" Script translation" body="Showcase talents, gain hands-on experience, and develop crucial skills" bgcolor="rgba(203, 155, 250, 1)"  :src="Signn"/>
+		<Feature_box heading=" Communication Interface" body="Showcase talents, gain hands-on experience, and develop crucial skills" bgcolor="rgba(209, 59, 125, 1)"  :src="Interface"/>
 	</div>
 </div>
+		<!-- <div class="feature">
+		<Box 
+		heading="Career Opportunities" 
+		body="Showcase talents, gain hands-on experience, and develop crucial skills like problem-solving and teamwork for career success." 	
+		src="./icons/logo.png" 
+		backgroundGradient="white" />white
+		<BoxOutline 
+		heading="Career Opportunities" 
+		body="Showcase talents, gain hands-on experience, and develop crucial skills like problem-solving and teamwork for career success." 
+		src="./icons/logo.png" 
+		backgroundGradient="white" />
+		
+	</div>
+	<div class="feature">
+		<BoxOutline 
+		heading="Career Opportunities" 
+		body="Showcase talents, gain hands-on experience, and develop crucial skills like problem-solving and teamwork for career success." 
+		src="./icons/logo.png" 
+		backgroundGradient="white" />
+		<Box 
+		heading="Career Opportunities" 
+		body="Showcase talents, gain hands-on experience, and develop crucial skills like problem-solving and teamwork for career success." 
+		src="./icons/logo.png" 
+		backgroundGradient="white" />
+		
+		
+	</div> -->
 </template>
 
 
 <script lang="ts">
 	import { defineComponent } from 'vue';
-	import Box from './Box.vue';
-	import BoxOutline from './Box_Outline.vue';
+	import RealTime from './icons/RealTime.png';
+	import Interface from './icons/interface.png';
+	import Signn from './icons/signnn.png';
+	import social from './icons/social.png';
+	import Feature_box from './feature_box.vue';
 	export default defineComponent({
 		name: 'FeaturesComponent',
 		components: {
-			Box,
-			BoxOutline
+			Feature_box
+		},
+		data() {
+			return {
+				RealTime,
+				Interface,
+				social,
+				Signn
+			};
 		}
 	})
 </script>
 
 <style scoped>
+
 	.features{
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-		gap: 40px;
-		
 		width: 100vw;
-		min-height: 100vh;
-		padding-top: 20px;
+		padding-top: 80px;
+		
 	}
-	.feature {
-		display: flex;
-		justify-content:center ;
-		align-items: center;
-		gap:50px
-	}
+
 	
 	.heading {
 		
@@ -70,13 +84,17 @@
 		font-weight: bold;
 		font-family: 'Poppins', sans-serif;
 		text-align: center;
-		/* Make sure the gradient applies to a larger area */
-		background: linear-gradient(90deg, rgba(104,53,203,1) 0%, rgba(245,193,68,1) 100%);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
+		color: black;
 		
 		
 	
+	}
+
+	.feature_page{
+		display: flex;
+		flex-direction: column;
+		gap: 80px;
+		height: 100vh;
 	}
 
 </style>

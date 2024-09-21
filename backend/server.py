@@ -1,6 +1,14 @@
 import threading
 from flask import Flask, request, jsonify, send_file, render_template, Response
+<<<<<<< HEAD
 from flask_cors import CORS
+=======
+from pipeline.text_to_audio import generate_audio_sync
+from flask_cors import CORS
+from pipeline.text_to_pose_scrapper import text_to_pose_scrapper, run_background_task
+import os
+
+>>>>>>> da62aba745ebfd35f4cc34563eef56e51b7c4435
 import pickle
 import cv2
 import os
@@ -32,14 +40,19 @@ def receive_transcript():
 
             # You can also save the transcript to a file, database, etc.
             # For example, saving to a file:
-            with open('transcript.txt', 'a') as f:
+            if os.path.exists('transcript.txt'):
+                os.remove('./transcript.txt')
+                print("File deleted successfully.")
+            else:
+                print("File does not exist.")
+            with open('transcript.txt', 'w') as f:
                 f.write(transcript + '\n')
              # Start background task in a new thread
             background_thread = threading.Thread(target=run_background_task)
             background_thread.start()
             
             # Return a success message
-            return send_file("./hello.mp4", mimetype='video/mp4')
+            return send_file("../pipeline/video_0.mp4", mimetype='video/mp4')
         else:
             return send_file("./hello.mp4", mimetype='video/mp4')
     except Exception as e:
@@ -60,8 +73,25 @@ def sse(client_id):
                 yield "data: Video still processing...\n\n"
                 time.sleep(5)  # Check every 5 seconds
 
+<<<<<<< HEAD
     return Response(generate(), mimetype='text/event-stream')
   
+=======
+        # Extract the transcript from the data
+        transcript = data.get('transcript')
+
+        if transcript:
+            # Call the function to generate audio
+            generate_audio_sync(transcript, VOICES[1])
+
+            # Send the audio file back to the client
+            return send_file("test.mp3", mimetype='audio/mp3')
+        else:
+            return jsonify({"error": "No transcript provided"}), 400
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500# Convert to Audio:
+
+>>>>>>> da62aba745ebfd35f4cc34563eef56e51b7c4435
     
 @app.route('/api/download_video', methods=['GET'])
 def download_video_endpoint():
@@ -72,6 +102,28 @@ def download_video_endpoint():
         return jsonify({"error": str(e)}), 500
 
 
+<<<<<<< HEAD
+=======
+# Load the model
+model_dict = pickle.load(open('./pipeline/model.p', 'rb'))
+model = model_dict['model']
+
+cap = cv2.VideoCapture(1)
+
+mp_hands = mp.solutions.hands
+mp_drawing = mp.solutions.drawing_utils
+mp_drawing_styles = mp.solutions.drawing_styles
+
+hands = mp_hands.Hands(static_image_mode=True, min_detection_confidence=0.3)
+
+# Define label dictionary
+labels_dict = {i: chr(65 + i) for i in range(26)}  # A-Z
+
+predicted_word = ""
+last_time = time.time()  # Timer to track the delay
+cooldown_time = 2  # Wait time (in seconds) between each letter recognition
+
+>>>>>>> da62aba745ebfd35f4cc34563eef56e51b7c4435
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -166,27 +218,6 @@ def get_word():
     global predicted_word
     print(f"Current predicted word: {predicted_word}")
     return jsonify({"predicted_word": predicted_word})
-
-
-@app.route('/api/transcript/audio', methods=['POST'])
-def transcriptToaudio():
-    try:
-        # Get the JSON data from the request
-        data = request.get_json()
-
-        # Extract the transcript from the data
-        transcript = data.get('transcript')
-
-        if transcript:
-            # Call the function to generate audio
-            generate_audio_sync(transcript, VOICES[1])
-
-            # Send the audio file back to the client
-            return send_file("test.mp3", mimetype='audio/mp3')
-        else:
-            return jsonify({"error": "No transcript provided"}), 400
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
 
 # Run the server
 if __name__ == '__main__':

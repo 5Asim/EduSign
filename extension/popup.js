@@ -9,27 +9,19 @@ document.getElementById("extract").addEventListener("click", async () => {
     },
     async () => {
       // Request the transcript after executing content.js
-      chrome.tabs.sendMessage(
-        tab.id,
-        { action: "extractTranscript" },
-        async (transcriptResponse) => {
-          if (transcriptResponse && transcriptResponse.transcript) {
-            const success = await sendTranscriptToServer(
-              transcriptResponse.transcript
-            ); // Send transcript to the server
+      chrome.tabs.sendMessage(tab.id, { action: "extractTranscript" }, async (transcriptResponse) => {
+        if (transcriptResponse && transcriptResponse.transcript) {
+          // const success = await sendTranscriptToServer(transcriptResponse.transcript); // Send transcript to the server
 
-            // Create the overlay only if sending the transcript was successful
-            if (success) {
-              chrome.tabs.sendMessage(tab.id, { action: "showOverlay" });
-            }
-          } else {
-            console.error(
-              "Failed to extract transcript:",
-              transcriptResponse.transcript
-            );
-          }
+          // Create the overlay only if sending the transcript was successful
+          chrome.tabs.sendMessage(tab.id, { action: "showOverlay" });
+          // if (success) {
+          //   chrome.tabs.sendMessage(tab.id, { action: "showOverlay" });
+          // }
+        } else {
+          console.error("Failed to extract transcript:", transcriptResponse.transcript);
         }
-      );
+      });
     }
   );
 });
@@ -54,7 +46,7 @@ async function sendTranscriptToServer(transcript) {
     console.log("Successfully sent transcript to server:", responseData);
 
     // Start listening to Server-Sent Events (SSE)
-    listenToSSE(clientId);  
+    listenToSSE();  
     return true; // Indicate success
   } catch (error) {
     console.error("Failed to send transcript to server:", error);
@@ -178,9 +170,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 // popup.js
-document
-  .getElementById("askQuestionButton")
-  .addEventListener("click", function () {
-    document.querySelector(".popup").style.display = "none"; // Hide popup
-    document.querySelector(".camera").style.display = "block"; // Show camera
-  });
+document.getElementById('askQuestionButton').addEventListener('click', function() {
+  document.querySelector('.popup').style.display = 'none'; // Hide popup
+  document.querySelector('.camera').style.display = 'block'; // Show camera
+});
