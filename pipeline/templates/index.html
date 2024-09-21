@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hand Sign Prediction</title>
+    <style>
+        body {
+            text-align: center;
+        }
+        video {
+            border: 1px solid black;
+        }
+        #clear-btn {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        #clear-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h2>Hand Sign Prediction</h2>
+    <img src="{{ url_for('video_feed') }}" id="video-feed">
+    <br>
+    <button id="clear-btn">Clear Word</button>
+
+    <script>
+        document.getElementById('clear-btn').addEventListener('click', async () => {
+            const response = await fetch('/clear_word', { method: 'POST' });
+            const data = await response.json();
+            console.log(data.status);
+        });
+    </script>
+</body>
+</html>

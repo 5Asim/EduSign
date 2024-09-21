@@ -1,51 +1,86 @@
-
-
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+/* Ensure the body fills the viewport without extra space */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 body {
   font-family: 'Poppins', sans-serif;
-  margin: 0;
+  background-color: #f0f2f5;
+  margin: 0; /* Remove default margin */
+  height: 100vh; /* Set height to 100% of the viewport */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; /* Prevent scrolling if needed */
+}
+
+/* Style for the popup */
+.popup {
+  width: 250px;
   padding: 20px;
-  background-color: #f0f0f0;
-}
-
-.container {
-  max-width: 640px;
-  margin: 0 auto;
-  text-align: center;
-}
-
-h1 {
-  color: #333;
-}
-
-.btn {
-  background-color: #4CAF50;
-  border: none;
-  color: white;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 4px 2px;
-  cursor: pointer;
-  border-radius: 4px;
-}
-
-.hidden {
-  display: none;
-}
-
-#video {
-  max-width: 100%;
-  border-radius: 8px;
-  margin-top: 20px;
-}
-
-.result-box {
   background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  position: relative; /* Keeps the popup in place */
+  z-index: 10; /* Ensures it's on top */
+  border-radius: 12px; 
+}
+
+/* Logo styling */
+.logo img {
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+/* Text styling */
+.popup_body {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+/* Horizontal line styling */
+hr {
+  border: 0;
+  border-top: 1px solid #e0e0e0;
+  margin: 15px 0;
+}
+
+/* Button container styling */
+.buttons {
+  display: flex;
+  justify-content: space-evenly;
+  gap: 5px;
+}
+
+/* Button (option) styling */
+.option {
+  flex-grow: 1; /* Ensure equal space for all options */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding: 10px;
-  margin-top: 20px;
-  min-height: 50px;
+  border-radius: 12px; /* Rounded button corners */
+  background-color: #f9f9f9;
+  transition: background-color 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+}
+
+.option:hover {
+  background-color: #e0e0e0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.option img {
+  margin-bottom: 5px;
+}
+
+.option p {
+  font-size: 10px;
+  color: #555;
+  margin: 0;
+  font-weight: 400;
+
 }
