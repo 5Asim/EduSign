@@ -54,7 +54,7 @@ def process_folder(input_folder, output_folder):
             image_path = os.path.join(input_folder, filename)
             print(f"Processing: {filename}")
             output_path_1 = os.path.join(
-                input_folder, f"generated_{filename}")
+                output_folder, f"generated_{filename}")
             # Call the Stable Diffusion API
             generated_image = call_stable_diffusion_api(
                 image_path, output_path_1)
@@ -65,8 +65,8 @@ def process_folder(input_folder, output_folder):
                 output_path = os.path.join(
                     output_folder, f"generated_{filename}")
                 with open(output_path, 'wb') as output_file:
-                    output_file.write(generated_image)
-                print(f"Image saved to {output_path}")
+                    # output_file.write(generated_image)
+                    print(f"Image saved to {output_path}")
             else:
                 print(f"Failed to process {filename}")
 
