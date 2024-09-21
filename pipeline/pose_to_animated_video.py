@@ -149,15 +149,19 @@ def sorted_alphanumeric(data):
 
 
 def create_video():
-    pathIn = './frames/test_A'
+    pathIn = './frames/initial'
     pathOut = 'GAN_generated_new.mp4'
     fps = 10
     frame_array = []
-    files = [f for f in os.listdir(pathIn) if isfile(join(pathIn, f))]
+    files = []
 
+    for filename in os.listdir(pathIn):
+        # Check if the filename starts with 'generated_'
+        if filename.startswith('generated_'):
+            # Append the file path to the list of generated files
+            file.append(os.path.join(pathIn, filename))
     # for sorting the file names properly
-    files.sort(key=lambda x: x[5:-4])
-    files.sort()
+    files.sort(key=lambda x: int(re.search(r'generated_frame(\d+)', x).group(1)))    
     sorted_list = sorted_alphanumeric(files)
 
     for file in sorted_list:
