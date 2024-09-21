@@ -19,7 +19,7 @@ def pipeline():
     # merge_pose_videos('./')
     # extract_images_from_pose_video('hello.mp4')
     # cropImage()
-    # process_folder(input_folder_path, output_folder_path)
+    process_folder(input_folder_path, output_folder_path)
     create_video()
 
 

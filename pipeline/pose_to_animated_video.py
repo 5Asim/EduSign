@@ -155,13 +155,33 @@ def sorted_alphanumeric(data):
 def create_video():
     pathIn = './frames/final'
     pathOut = 'GAN_generated_new.mp4'
-    fps = 30
+    fps = 20
     frame_array = []
     files = []
 
     for filename in os.listdir(pathIn):
+        # Add any other image formats if needed
+        if filename.endswith(('.jpg', '.png', '.jpeg', '.bmp')):
+            # Full path to the image
+            image_path = os.path.join(pathIn, filename)
+
+            # Read the image
+            image = cv2.imread(image_path)
+
+            # Convert to grayscale
+            gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+            # Apply binary threshold
+            _, bw_image = cv2.threshold(
+                gray_image, 127, 255, cv2.THRESH_BINARY)
+            filename1 = 'bg' + filename
+            # Save the black and white image to the output folder
+            output_path_2 = os.path.join(pathIn, filename1)
+            cv2.imwrite(output_path_2, bw_image)
+
+    for filename in os.listdir(pathIn):
         # Check if the filename starts with 'generated_'
-        if filename.startswith('generated_'):
+        if filename.startswith('bggenerated_'):
             # Append the file path to the list of generated files
             files.append(os.path.join(pathIn, filename))
     # for sorting the file names properly
