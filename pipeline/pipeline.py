@@ -13,11 +13,15 @@ output_folder_path = './frames/final'
 
 # First the text transcripts are sent to the server and saved in the text file.
 
-def pipelin():
+def pipeline():
     # Convert the transcript file into pose video
-    text_to_pose_scrapper()
-    merge_pose_videos('./')
-    extract_images_from_pose_video('final_video.mp4')
+    # text_to_pose_scrapper()
+    # merge_pose_videos('./')
+    extract_images_from_pose_video('hello.mp4')
     cropImage()
-    process_folder(input_folder_path, output_folder_path)
-    create_video()
+    # process_folder(input_folder_path, output_folder_path)
+    # create_video()
+
+
+if __name__ == '__main__':
+    pipeline()
