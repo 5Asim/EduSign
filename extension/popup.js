@@ -11,7 +11,7 @@ document.getElementById("extract").addEventListener("click", async () => {
       // Request the transcript after executing content.js
       chrome.tabs.sendMessage(tab.id, { action: "extractTranscript" }, async (transcriptResponse) => {
         if (transcriptResponse && transcriptResponse.transcript) {
-          // const success = await sendTranscriptToServer(transcriptResponse.transcript); // Send transcript to the server
+          const success = await sendTranscriptToServer(transcriptResponse.transcript); // Send transcript to the server
 
           // Create the overlay only if sending the transcript was successful
           chrome.tabs.sendMessage(tab.id, { action: "showOverlay" });
@@ -28,25 +28,25 @@ document.getElementById("extract").addEventListener("click", async () => {
 
 async function sendTranscriptToServer(transcript) {
   try {
-    console.log("Sending transcript to server:", transcript); // Log the transcript data
+    // console.log("Sending transcript to server:", transcript); // Log the transcript data
 
-    const response = await fetch("http://localhost:5000/api/transcript", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ transcript: transcript }), // Send the transcript data as JSON
-    });
+    // const response = await fetch("http://localhost:5000/api/transcript", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({ transcript: transcript }), // Send the transcript data as JSON
+    // });
+    // print(response)
+    // if (!response.ok) {
+    //   throw new Error("Network response was not ok");
+    // }
+    listenToSSE();  
 
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-
-    const responseData = await response.json();
-    console.log("Successfully sent transcript to server:", responseData);
+    // const responseData = await response.json();
+    // console.log("Successfully sent transcript to server:", responseData);
 
     // Start listening to Server-Sent Events (SSE)
-    listenToSSE();  
     return true; // Indicate success
   } catch (error) {
     console.error("Failed to send transcript to server:", error);
@@ -55,8 +55,9 @@ async function sendTranscriptToServer(transcript) {
 }
 
 function listenToSSE() {
+  console.log("sse")
   // Create an EventSource to listen to the server updates
-  const eventSource = new EventSource(`http://localhost:5000/api/sse/`);
+  const eventSource = new EventSource(`http://localhost:5000/api/sse`);
 
   eventSource.onmessage = function(event) {
     console.log("SSE message received:", event.data);
@@ -66,7 +67,7 @@ function listenToSSE() {
       console.log("Video is ready:", event.data);
       
       // To download the video using the src
-      
+
       
       // Close the SSE connection once the video is ready and downloaded
       eventSource.close();
@@ -173,4 +174,4 @@ document.addEventListener("DOMContentLoaded", async () => {
 document.getElementById('askQuestionButton').addEventListener('click', function() {
   document.querySelector('.popup').style.display = 'none'; // Hide popup
   document.querySelector('.camera').style.display = 'block'; // Show camera
-});
+})}

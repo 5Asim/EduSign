@@ -55,7 +55,7 @@ def extract_images_from_pose_video(video_filepath):
 def merge_pose_videos(video_files, output_path="final_video.mp4"):
     # List to hold all the frames from the videos
     all_frames = []
-
+    print(video_files)
     # Loop through each video file
     for video_file in video_files:
         # Open the video file

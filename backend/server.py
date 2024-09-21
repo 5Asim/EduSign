@@ -2,7 +2,7 @@ import threading
 from flask import Flask, request, jsonify, send_file, render_template, Response
 from pipeline.text_to_audio import generate_audio_sync
 from flask_cors import CORS
-from pipeline.text_to_pose_scrapper import text_to_pose_scrapper, run_background_task
+from pipeline.text_to_pose_scrapper import run_background_task
 import os
 
 import pickle
@@ -11,8 +11,8 @@ import os
 import mediapipe as mp
 import numpy as np
 import time
-from text_audio import generate_audio_sync
-from pipeline.text_to_pose_scrapper import text_to_pose_scrapper, run_background_task
+from pipeline.text_to_audio import generate_audio_sync
+from pipeline.text_to_pose_scrapper import run_background_task
 
 app = Flask(__name__)
 CORS(app)
@@ -56,10 +56,11 @@ def receive_transcript():
     
 @app.route('/api/sse')
 def sse():
+    print("sse")
     def generate():
         while True:
             # Check if video processing is done for this client
-            if os.path.exists('final_video.mp4'):
+            if os.path.exists('./pipeline/final_video.mp4'):
                 # Video is ready, send the video URL to the client
                 # Upload to the vercel blobs
                 
