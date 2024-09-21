@@ -52,7 +52,6 @@ def extract_images_from_pose_video():
 
 
 def cropImage():
-
     # Set the paths for the input folder containing images and the output folder
     input_folder = './frames/initial'
     output_folder = './frames/test_A'
