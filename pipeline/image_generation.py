@@ -6,10 +6,11 @@ import os
 STABLE_DIFFUSION_API_URL = "https://api.stability.ai/v2beta/stable-image/control/structure"
 
 # API key if needed
-API_KEY = ''  # Optional, depending on the API you're using
+# Optional, depending on the API you're using
+API_KEY = 'sk-s3ODL602XoeQbpALvPclwWXTYnVgciimKsvdS3Ur5lUBe9oF'
 
 
-def call_stable_diffusion_api(image_path):
+def call_stable_diffusion_api(image_path, output_path):
     """
     Call the Stable Diffusion API with the pose image.
     """
@@ -20,7 +21,7 @@ def call_stable_diffusion_api(image_path):
             "accept": "image/*"
         },
         files={
-            "image": open("./frames/initial/image1.png", "rb")
+            "image": open(image_path, "rb")
         },
         data={
             "prompt": "Human face of Brad Pitt in the sign language pose given by the image",
@@ -29,9 +30,11 @@ def call_stable_diffusion_api(image_path):
     )
 
     if response.status_code == 200:
-        with open("./frames/final/image1.png", 'wb') as file:
+        with open(output_path, 'wb') as file:
+            print("response content")
             file.write(response.content)
     else:
+        print("error response json")
         raise Exception(str(response.json()))
 
 
@@ -50,11 +53,14 @@ def process_folder(input_folder, output_folder):
         if filename.endswith(('png', 'jpg', 'jpeg')):
             image_path = os.path.join(input_folder, filename)
             print(f"Processing: {filename}")
-
+            output_path_1 = os.path.join(
+                input_folder, f"generated_{filename}")
             # Call the Stable Diffusion API
-            generated_image = call_stable_diffusion_api(image_path)
+            generated_image = call_stable_diffusion_api(
+                image_path, output_path_1)
 
             if generated_image:
+                print("generated Image")
                 # Save the generated image
                 output_path = os.path.join(
                     output_folder, f"generated_{filename}")
@@ -64,5 +70,5 @@ def process_folder(input_folder, output_folder):
             else:
                 print(f"Failed to process {filename}")
 
-if __name__ == '__main__':
-    call_stable_diffusion_api("image1.png")
+# if __name__ == '__main__':
+#     call_stable_diffusion_api("image1.png")
