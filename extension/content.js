@@ -58,7 +58,7 @@ function createOverlay() {
     object-fit: cover;
   `;
   video.autoplay = true;
-  video.src = `./video_0.mp4`;  // Replace with the actual URL of your sign language video
+  video.src = "https://hlhziqtgrmweszli.public.blob.vercel-storage.com/hello-gvdayfIYVlXjlnLgfINVOUbzEW4sBv.mp4"; 
 
   overlay.appendChild(video);
   videoPlayer.appendChild(overlay);
