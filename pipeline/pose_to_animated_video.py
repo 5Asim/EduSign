@@ -5,7 +5,6 @@ import re
 from os.path import isfile, join
 import fnmatch
 
-
 def extract_images_from_pose_video():
     # Open the video file
     merged_output = './hello.mp4'
@@ -59,7 +58,6 @@ def cropImage():
     output_folder = './frames/test_A'
 
     # Delete any previous frames in the folder
-
     for filename in os.listdir(output_folder):
         file_path = os.path.join(output_folder, filename)
         try:

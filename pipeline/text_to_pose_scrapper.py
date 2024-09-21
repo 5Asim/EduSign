@@ -14,7 +14,7 @@ def init_browser():
 
 # Enter text in the input field
 # Only give small inputs
-input_field = browser.find_element(By.XPATH, '//*[@id="desktop"]')
+input_field = init_browser().find_element(By.XPATH, '//*[@id="desktop"]')
 text = "Hello, how are you? I am fine."
 input_field.send_keys(text)
 
