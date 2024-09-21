@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduSign - Real-time Communication for Deaf and Hard of Hearing Students</title>
+    <link rel="stylesheet" href="homed.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo-container">
+                <img src="images\1.png" alt="EduSign Logo" class="logo" width = "70px" height="70px">
+                <h1>EduSign</h1>
+            </div>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#features" class="hover-effect">Features</a></li>
+                    <li><a href="#how-it-works" class="hover-effect">How It Works</a></li>
+                    <li><a href="#testimonials" class="hover-effect">Testimonials</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container split-layout">
+            <div class="hero-content">
+                <h2>Empowering Deaf and Hard of Hearing Students</h2>
+                <p>EduSign provides flawless, real-time communication support for educational content.</p>
+                <div class="cta-buttons">
+                    <a href="#" class="btn">Add to Chrome</a>
+                    <a href="#" class="btn">Learn More</a>
+                </div>
+            </div>
+            <div class="image-slider">
+                <img src="images\image-2.webp" alt="EduSign in action 1" class="slider-image">
+                <img src="images\image-3.webp" alt="EduSign in action 2" class="slider-image">
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="container split-layout">
+        <div class="section-content">
+            <h2 class="hover-effect">Features</h2>
+            <div class="features">
+                <div class="feature">
+                    <h3>Real-time Captioning</h3>
+                    <p>Instantly convert speech to text for seamless understanding.</p>
+                </div>
+                <div class="feature">
+                    <h3>Sign Language Integration</h3>
+                    <p>Optional sign language interpretation alongside captions.</p>
+                </div>
+                <div class="feature">
+                    <h3>Multi-language Support</h3>
+                    <p>Captions available in multiple languages for diverse classrooms.</p>
+                </div>
+            </div>
+        </div>
+        <div class="image-slider">
+            <img src="/api/placeholder/400/300" alt="Feature 1" class="slider-image">
+            <img src="/api/placeholder/400/300" alt="Feature 2" class="slider-image">
+        </div>
+    </section>
+
+    <section id="how-it-works" class="container split-layout">
+        <div class="section-content">
+            <h2 class="hover-effect">How It Works</h2>
+            <ol>
+                <li>Install the EduSign Chrome extension</li>
+                <li>Grant necessary permissions for audio access</li>
+                <li>Use in any online classroom or educational video</li>
+                <li>Experience real-time captioning and interpretation</li>
+            </ol>
+        </div>
+        <div class="image-slider">
+            <img src="/api/placeholder/400/300" alt="How it works 1" class="slider-image">
+            <img src="/api/placeholder/400/300" alt="How it works 2" class="slider-image">
+        </div>
+    </section>
+
+    <section id="testimonials" class="container split-layout">
+        <div class="section-content">
+            <h2 class="hover-effect">What Our Users Say</h2>
+            <blockquote>
+                "EduSign has revolutionized my online learning experience. I feel fully included in every class discussion now!"
+                <footer>- Sarah, College Student</footer>
+            </blockquote>
+        </div>
+        <div class="image-slider">
+            <img src="/api/placeholder/400/300" alt="Testimonial 1" class="slider-image">
+            <img src="/api/placeholder/400/300" alt="Testimonial 2" class="slider-image">
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 EduSign. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Simple image slider functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const sliders = document.querySelectorAll('.image-slider');
+            sliders.forEach(slider => {
+                let currentImage = 0;
+                const images = slider.querySelectorAll('img');
+                setInterval(() => {
+                    images[currentImage].style.opacity = 0;
+                    currentImage = (currentImage + 1) % images.length;
+                    images[currentImage].style.opacity = 1;
+                }, 5000);
+            });
+        });
+    </script>
+</body>
+</html>
