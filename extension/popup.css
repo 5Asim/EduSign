@@ -84,3 +84,35 @@ hr {
   font-weight: 400;
 
 }
+
+.camera {
+  display: none; /* Initially hidden */
+  width: 250px;
+  height: auto; /* Auto height */
+  padding: 20px; /* Padding for spacing */
+  background-color: #fff; /* White background */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Light shadow */
+  border-radius: 12px; /* Rounded corners */
+  position: relative; /* To keep it in place */
+  z-index: 10; /* Ensures it’s on top */
+  text-align: center; /* Center the content */
+}
+
+
+
+.word {
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.word_recognized {
+  font-weight: 400;
+}
+
+.camera_buttons {
+  display: flex; /* Use flexbox to align buttons in a row */
+  justify-content: space-between; /* Space evenly between buttons */
+  align-items: center; /* Center align buttons vertically */
+  margin-top: 10px; /* Add spacing above buttons */
+  gap: 10px; /* Add some space between the buttons */
+}

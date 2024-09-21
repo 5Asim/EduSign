@@ -1,5 +1,7 @@
-from flask import Flask, render_template, Response, jsonify
+from flask import Flask, render_template, Response, jsonify, request, send_file
+
 from flask_cors import CORS
+from text_to_audio import generate_audio_sync
 import pickle
 import cv2
 import mediapipe as mp
@@ -8,6 +10,7 @@ import time
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
+VOICES = ['en-US-GuyNeural', 'en-US-JennyNeural']
 
 # Load the model
 model_dict = pickle.load(open('./model.p', 'rb'))
@@ -99,5 +102,31 @@ def clear_word():
     predicted_word = ""
     return jsonify({"status": "cleared"})
 
+@app.route('/get_word', methods=['GET'])
+def get_word():
+    global predicted_word
+    print(f"Current predicted word: {predicted_word}")
+    return jsonify({"predicted_word": predicted_word})
+
+
+@app.route('/api/transcript/audio', methods=['POST'])
+def transcriptToaudio():
+    try:
+        # Get the JSON data from the request
+        data = request.get_json()
+
+        # Extract the transcript from the data
+        transcript = data.get('transcript')
+
+        if transcript:
+            # Call the function to generate audio
+            generate_audio_sync(transcript, VOICES[1])
+
+            # Send the audio file back to the client
+            return send_file("test.mp3", mimetype='audio/mp3')
+        else:
+            return jsonify({"error": "No transcript provided"}), 400
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 if __name__ == '__main__':
     app.run(debug=True)

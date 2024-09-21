@@ -17,15 +17,15 @@
       height: 100%; /* Full height */
       overflow: auto; /* Enable scroll if needed */
       background-color: rgba(0, 0, 0, 0.5); /* Black w/ opacity */
-  }
-  .modal-content {
+    }
+    .modal-content {
       background-color: #fefefe;
       margin: 15% auto; /* 15% from the top and centered */
       padding: 20px;
       border: 1px solid #888;
       width: 80%; /* Could be more or less, depending on screen size */
-  }
-</style>
+    }
+  </style>
 </head>
 <body>
     <div class="popup">
@@ -39,48 +39,46 @@
         <hr>
       </div>
       <div class="buttons">
-        <!-- <div class="option" id="extract">
-          <img src="./icons/Sign.png" alt="" width="30" height="30">
-          <p>Sign Language</p>
-        </div> -->
         <div class="option" id="askQuestionButton">
           <img src="./icons/Ask.png" alt="" width="30" height="30">
           <p>Ask Question</p>
         </div>
         <div class="option">
           <img src="./icons/web.png" alt="" width="30" height="30">
-          <p> Want to Know More</p>
+          <p>Want to Know More</p>
         </div>
       </div>
-      <div id="videoContainer" style="display:none;">
+    </div>
+
+    <div class="camera" style="display: none;">
+      <div id="videoContainer">
         <img src="" id="video-feed" style="width: 100%; height: auto; border: 1px solid black;">
+      </div>
+      <div class="camera_body">
+        <p class="word">Recognized Word: <span class="word_recognized" id="extension-recognized-word">No word recognized</span></h3>
+          <div class="camera_buttons">
+            <div class="option" id="extension-copy-btn">
+              <img src="./icons/copy.png" alt="Copy Icon" width="30" height="30">
+              <p>Copy</p>
+            </div>
+            
+            <div class="option" id="narrate-btn">
+              <img src="./icons/narrate.png" alt="Narrate Icon" width="30" height="30">
+              <p>Narrate</p>
+            </div>
+            
+            <div class="option" id="clear-btn">
+              <img src="./icons/clear.png" alt="Clear Icon" width="30" height="30">
+              <p>Clear</p>
+            </div>
+          </div>
+        
+      </div>
+      
     </div>
-    <button id="clear-btn" style="margin-top: 10px;">Clear Word</button>
-    
-    </div>
-
     
 
-  <!-- <div class="card">
-    <ul class="list">
-      <li class="element">
-        <img src="./icons/EduSign_letter.png" alt="EduSign Logo" width="20" height="20">
-      </li>
-    </ul>
-    <div class="separator"></div>
-    <ul class="list">
-      <li class="element">
-        <p class="label" id="video">Ask Question</p>
-      </li>
-      <li class="element">
-        <p class="label" id="extract">Convert</p>
-      </li>
-      <li class="element">
-        <p class="label" id="website">Website</p>
-      </li>
-    </ul>
-  </div> -->
-  
-  <script src="popup.js"></script>
+    <script src="popup.js"></script>
+    
 </body>
 </html>

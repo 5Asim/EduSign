@@ -28,13 +28,44 @@
     <h2>Hand Sign Prediction</h2>
     <img src="{{ url_for('video_feed') }}" id="video-feed">
     <br>
+    <div>
+        <h3>Recognized Word: <span id="recognized-word">{{ predicted_word }}</span></h3>
+        <button id="copy-btn">Copy</button>
+    </div>
     <button id="clear-btn">Clear Word</button>
 
     <script>
+        // Function to fetch the recognized word
+        async function fetchRecognizedWord() {
+            const response = await fetch('/get_word');
+            const data = await response.json();
+            document.getElementById('recognized-word').innerText = data.predicted_word; // Update displayed word
+        }
+
+        // Periodically fetch the recognized word every second
+        setInterval(fetchRecognizedWord, 1000); // Adjust the interval as needed
+
         document.getElementById('clear-btn').addEventListener('click', async () => {
             const response = await fetch('/clear_word', { method: 'POST' });
             const data = await response.json();
             console.log(data.status);
+            document.getElementById('recognized-word').innerText = ""; // Clear displayed word
+        });
+
+        document.getElementById('copy-btn').addEventListener('click', async () => {
+            const response = await fetch('/get_word');
+            const data = await response.json();
+            const textToCopy = data.predicted_word;
+
+            if (textToCopy) {
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    alert("Text copied to clipboard!");
+                }).catch(err => {
+                    console.error("Error copying text: ", err);
+                });
+            } else {
+                alert("No text to copy!");
+            }
         });
     </script>
 </body>
