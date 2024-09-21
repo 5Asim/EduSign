@@ -7,7 +7,7 @@ STABLE_DIFFUSION_API_URL = "https://api.stability.ai/v2beta/stable-image/control
 
 # API key if needed
 # Optional, depending on the API you're using
-API_KEY = 'sk-s3ODL602XoeQbpALvPclwWXTYnVgciimKsvdS3Ur5lUBe9oF'
+API_KEY = ''
 
 
 def call_stable_diffusion_api(image_path, output_path):
@@ -24,7 +24,7 @@ def call_stable_diffusion_api(image_path, output_path):
             "image": open(image_path, "rb")
         },
         data={
-            "prompt": "Human face of Brad Pitt in the sign language pose given by the image",
+            "prompt": "Human face of John Cena in the sign language pose given by the image with a straight face in this and all upcoming ",
             "output_format": "png"
         },
     )
@@ -70,5 +70,5 @@ def process_folder(input_folder, output_folder):
             else:
                 print(f"Failed to process {filename}")
 
-# if __name__ == '__main__':
-#     call_stable_diffusion_api("image1.png")
+if __name__ == '__main__':
+    call_stable_diffusion_api("./frames/initial/frame89.png", './frames/image1.png')

@@ -12,17 +12,12 @@ def init_browser():
     time.sleep(5)  # wait for the page to load
     return browser
 
-
-
 def download_video(browser, video_index):
     # Enter text in the input field
-    # Only give small inputs
-    input_field = init_browser().find_element(By.XPATH, '//*[@id="desktop"]')
-    text = "Hello, how are you? I am fine."
-    input_field.send_keys(text)
+    # Only give small inputs    
 
     # Wait for the video to load
-    time.sleep(1000)
+    time.sleep(500)
     # Find the video element and download it
     video = browser.find_element(
         By.XPATH, '//*[@id="content"]/app-spoken-to-signed/app-signed-language-output/video')
