@@ -8,6 +8,7 @@ STABLE_DIFFUSION_API_URL = "https://api.stability.ai/v2beta/stable-image/control
 # API key if needed
 API_KEY = ''  # Optional, depending on the API you're using
 
+
 def call_stable_diffusion_api(image_path):
     """
     Call the Stable Diffusion API with the pose image.
@@ -31,7 +32,7 @@ def call_stable_diffusion_api(image_path):
         with open("./frames/final/image1.png", 'wb') as file:
             file.write(response.content)
     else:
-        raise Exception(str(response.json()))    
+        raise Exception(str(response.json()))
 
 
 def process_folder(input_folder, output_folder):
@@ -45,7 +46,8 @@ def process_folder(input_folder, output_folder):
 
     # Loop through all pose images in the input folder
     for filename in os.listdir(input_folder):
-        if filename.endswith(('png', 'jpg', 'jpeg')):  # You can add more file types if needed
+        # You can add more file types if needed
+        if filename.endswith(('png', 'jpg', 'jpeg')):
             image_path = os.path.join(input_folder, filename)
             print(f"Processing: {filename}")
 
@@ -54,19 +56,13 @@ def process_folder(input_folder, output_folder):
 
             if generated_image:
                 # Save the generated image
-                output_path = os.path.join(output_folder, f"generated_{filename}")
+                output_path = os.path.join(
+                    output_folder, f"generated_{filename}")
                 with open(output_path, 'wb') as output_file:
                     output_file.write(generated_image)
                 print(f"Image saved to {output_path}")
             else:
                 print(f"Failed to process {filename}")
-
-# Define your folder paths
-input_folder_path = './frames/initial'   # Pose images folder
-output_folder_path = './frames/final' # Output folder for generated human images
-
-# Start processing
-process_folder(input_folder_path, output_folder_path)
 
 # if __name__ == '__main__':
 #     call_stable_diffusion_api("image1.png")
