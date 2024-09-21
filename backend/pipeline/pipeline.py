@@ -9,8 +9,6 @@ input_folder_path = './frames/test_A'   # Pose images folder
 output_folder_path = './frames/final'
 
 # Start processing
-
-
 # First the text transcripts are sent to the server and saved in the text file.
 
 def pipeline():

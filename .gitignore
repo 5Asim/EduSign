@@ -1,24 +1,19 @@
-# Ignore node_modules directory
-node_modules/
+# Python virtual environment
+venv/
 
-# Ignore log files
-*.log
+# Byte-compiled files
+__pycache__/
+*.py[cod]
 
-# Ignore build output directories
-/dist/
-/build/
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+.eggs/
+*.egg-info/
+.installed.cfg
+*.egg
 
-# Ignore environment files
+# Environment variables
 .env
-
-# Ignore OS-specific files
-.DS_Store
-Thumbs.db
-
-# Ignore IDE-specific files
-.vscode/
-.idea/
-
-# Ignore generated files
-*.zip
-*.tar.gz
