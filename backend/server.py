@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify, send_file
 from text_audio import generate_audio_sync
 from flask_cors import CORS
+from pipeline.text_to_pose_scrapper import text_to_pose_scrapper
 
 app = Flask(__name__)
 CORS(app)
@@ -26,9 +27,7 @@ def receive_transcript():
             # For example, saving to a file:
             with open('transcript.txt', 'a') as f:
                 f.write(transcript + '\n')
-
-            
-
+            text_to_pose_scrapper()   
             # Return a success message
             return send_file("./hello.mp4", mimetype='video/mp4')
         else:

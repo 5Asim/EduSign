@@ -5,6 +5,7 @@ import re
 from os.path import isfile, join
 import fnmatch
 
+
 def extract_images_from_pose_video(video_filepath):
     # Open the video file
     merged_output = video_filepath
@@ -50,6 +51,7 @@ def extract_images_from_pose_video(video_filepath):
     # Release the video object
     video.release()
 
+
 def merge_pose_videos(video_files, output_path="final_video.mp4"):
     # List to hold all the frames from the videos
     all_frames = []
@@ -84,7 +86,8 @@ def merge_pose_videos(video_files, output_path="final_video.mp4"):
     size = (width, height)
 
     # Initialize the video writer object
-    out = cv2.VideoWriter(output_path, cv2.VideoWriter_fourcc(*'MP4V'), 10, size)
+    out = cv2.VideoWriter(
+        output_path, cv2.VideoWriter_fourcc(*'MP4V'), 10, size)
 
     # Write all frames to the output video
     for frame in all_frames:
@@ -94,6 +97,7 @@ def merge_pose_videos(video_files, output_path="final_video.mp4"):
     out.release()
 
     print(f"Merged video saved as {output_path}")
+
 
 def cropImage():
     # Set the paths for the input folder containing images and the output folder
@@ -151,21 +155,42 @@ def sorted_alphanumeric(data):
 def create_video():
     pathIn = './frames/final'
     pathOut = 'GAN_generated_new.mp4'
-    fps = 10
+    fps = 20
     frame_array = []
     files = []
 
     for filename in os.listdir(pathIn):
+        # Add any other image formats if needed
+        if filename.endswith(('.jpg', '.png', '.jpeg', '.bmp')):
+            # Full path to the image
+            image_path = os.path.join(pathIn, filename)
+
+            # Read the image
+            image = cv2.imread(image_path)
+
+            # Convert to grayscale
+            gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+            # Apply binary threshold
+            _, bw_image = cv2.threshold(
+                gray_image, 127, 255, cv2.THRESH_BINARY)
+            filename1 = 'bg' + filename
+            # Save the black and white image to the output folder
+            output_path_2 = os.path.join(pathIn, filename1)
+            cv2.imwrite(output_path_2, bw_image)
+
+    for filename in os.listdir(pathIn):
         # Check if the filename starts with 'generated_'
-        if filename.startswith('generated_'):
+        if filename.startswith('bggenerated_'):
             # Append the file path to the list of generated files
             files.append(os.path.join(pathIn, filename))
     # for sorting the file names properly
-    files.sort(key=lambda x: int(re.search(r'generated_frame(\d+)', x).group(1)))            
+    files.sort(key=lambda x: int(
+        re.search(r'generated_frame(\d+)', x).group(1)))
 
     for file in files:
-        if fnmatch.fnmatch(file, '*_synthesized_image.jpg'):
-            filename = pathIn + '/' + file
+        if fnmatch.fnmatch(file, '*.png'):
+            filename = file
             # reading each files
             img = cv2.imread(filename)
             height, width, layers = img.shape
@@ -174,7 +199,7 @@ def create_video():
         # inserting the frames into an image array
         frame_array.append(img)
         out = cv2.VideoWriter(
-            pathOut, cv2.VideoWriter_fourcc(*'MP4V'), fps, size)
+            pathOut, cv2.VideoWriter_fourcc('m', 'p', '4', 'v'), fps, size)
         for i in range(len(frame_array)):
             # writing to a image array
             out.write(frame_array[i])
