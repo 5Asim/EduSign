@@ -1,6 +1,7 @@
 <script lang="ts">
 import AppNavbar from '../components/navbar.vue'
-import DashboardComponent from '../components/dashboard.vue'
+import Dashboard from '@/components/dashboard.vue';
+import Features from '@/components/features.vue';
 import { defineComponent } from 'vue';
 
 
@@ -9,7 +10,8 @@ import { defineComponent } from 'vue';
 		name: 'Home_Page',
 		components: {
 			AppNavbar,
-			DashboardComponent
+			Dashboard,
+			Features
 		},
 		props:{
 
@@ -19,15 +21,33 @@ import { defineComponent } from 'vue';
 
 
 <template>
-	<div>
-		<AppNavbar/>
-		<div>
-			<DashboardComponent heading="Heading" body="Body" src="../components/icons/convert.png"/>
+	<AppNavbar/>
+	<div class="page">
+		
+		<div class="dashboard">
+			<Dashboard/>
+		</div>
+		<div class="features">
 			
-			
-
+			<Features/>
 		</div>
 
 	</div>
 </template>
+
+<style>
+	.page {
+		display: flex;
+		flex-direction: column;
+		gap: 50px;
+		align-items: center;
+		background-color: rgba(17, 12, 36, 1);
+		
+	}
+
+	.dashboard {
+			background: transparent; /* Ensure the dashboard has no background */
+			width: 100%; /* Optional: Make sure it spans the width */
+	}
+</style>
 

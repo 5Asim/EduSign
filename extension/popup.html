@@ -1,28 +1,85 @@
- <!DOCTYPE html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>EduSign Popup</title>
-  <style>
-    body { 
-      text-align: center; 
-      font-family: 'Poppins', sans-serif;
-    }
-    .hidden {
-      display: none;
-    }
-  </style>
   <link rel="stylesheet" href="popup.css">
-  <link href="https://fonts.googleapis.com/css?family=Poppins&display=swap" rel="stylesheet">  
+  <style>
+    /* Add basic styles for the modal */
+    .modal {
+      display: none; /* Hidden by default */
+      position: fixed;
+      z-index: 1; /* Sit on top */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgba(0, 0, 0, 0.5); /* Black w/ opacity */
+  }
+  .modal-content {
+      background-color: #fefefe;
+      margin: 15% auto; /* 15% from the top and centered */
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%; /* Could be more or less, depending on screen size */
+  }
+</style>
 </head>
 <body>
-  <h1>Welcome To EduSign</h1>
-  <!-- <button class="card" id="extract">Extract</button> -->
-  <button class="card" id="startCamera">Start Camera</button>
-  <div id="cameraContainer" class="hidden">
-    <video id="video" width="640" height="480" autoplay></video>
-    <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
-    <div id="result" class="result-box"></div>
-  </div>
+    <div class="popup">
+      <div class="logo">
+        <img src="./icons/EduSign_letter.png" width="100" height="100">
+      </div>
+      <div>
+        <p class="popup_body">The lens sign convention.</p>
+      </div>
+      <div>
+        <hr>
+      </div>
+      <div class="buttons">
+        <!-- <div class="option" id="extract">
+          <img src="./icons/Sign.png" alt="" width="30" height="30">
+          <p>Sign Language</p>
+        </div> -->
+        <div class="option" id="askQuestionButton">
+          <img src="./icons/Ask.png" alt="" width="30" height="30">
+          <p>Ask Question</p>
+        </div>
+        <div class="option">
+          <img src="./icons/web.png" alt="" width="30" height="30">
+          <p> Want to Know More</p>
+        </div>
+      </div>
+      <div id="videoContainer" style="display:none;">
+        <img src="" id="video-feed" style="width: 100%; height: auto; border: 1px solid black;">
+    </div>
+    <button id="clear-btn" style="margin-top: 10px;">Clear Word</button>
+    
+    </div>
+
+    
+
+  <!-- <div class="card">
+    <ul class="list">
+      <li class="element">
+        <img src="./icons/EduSign_letter.png" alt="EduSign Logo" width="20" height="20">
+      </li>
+    </ul>
+    <div class="separator"></div>
+    <ul class="list">
+      <li class="element">
+        <p class="label" id="video">Ask Question</p>
+      </li>
+      <li class="element">
+        <p class="label" id="extract">Convert</p>
+      </li>
+      <li class="element">
+        <p class="label" id="website">Website</p>
+      </li>
+    </ul>
+  </div> -->
   
   <script src="popup.js"></script>
 </body>
