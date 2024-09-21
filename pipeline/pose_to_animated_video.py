@@ -5,9 +5,9 @@ import re
 from os.path import isfile, join
 import fnmatch
 
-def extract_images_from_pose_video():
+def extract_images_from_pose_video(video_filepath):
     # Open the video file
-    merged_output = './hello.mp4'
+    merged_output = video_filepath
     # Open the video file
     video = cv2.VideoCapture(merged_output)
     path = "./frames/initial"
@@ -50,6 +50,50 @@ def extract_images_from_pose_video():
     # Release the video object
     video.release()
 
+def merge_pose_videos(video_files, output_path="final_video.mp4"):
+    # List to hold all the frames from the videos
+    all_frames = []
+
+    # Loop through each video file
+    for video_file in video_files:
+        # Open the video file
+        video = cv2.VideoCapture(video_file)
+
+        # Check if the video file was opened successfully
+        if not video.isOpened():
+            print(f"Error opening video file: {video_file}")
+            continue
+
+        # Read frames from the video and append them to the frame list
+        while True:
+            ret, frame = video.read()
+            if not ret:
+                break
+            all_frames.append(frame)
+
+        # Release the video object after reading all frames
+        video.release()
+
+    # Check if we have frames to write to the output
+    if len(all_frames) == 0:
+        print("No frames were found to write to the output video.")
+        return
+
+    # Get the size of the first frame (assuming all frames are the same size)
+    height, width, layers = all_frames[0].shape
+    size = (width, height)
+
+    # Initialize the video writer object
+    out = cv2.VideoWriter(output_path, cv2.VideoWriter_fourcc(*'MP4V'), 10, size)
+
+    # Write all frames to the output video
+    for frame in all_frames:
+        out.write(frame)
+
+    # Release the video writer object
+    out.release()
+
+    print(f"Merged video saved as {output_path}")
 
 def cropImage():
     # Set the paths for the input folder containing images and the output folder

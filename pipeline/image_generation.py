@@ -64,5 +64,5 @@ def process_folder(input_folder, output_folder):
             else:
                 print(f"Failed to process {filename}")
 
-# if __name__ == '__main__':
-#     call_stable_diffusion_api("image1.png")
+if __name__ == '__main__':
+    call_stable_diffusion_api("image1.png")

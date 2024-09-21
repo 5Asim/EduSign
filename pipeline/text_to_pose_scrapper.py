@@ -51,9 +51,9 @@ def read_text_segments(file_path):
         segments = file.readlines()
     return segments
 
-def main():
+def text_to_pose_scrapper():
     # Path to the file containing the text segments
-    file_path = 'path_to_your_transcripts_file.txt'
+    file_path = './transcript.txt'
     segments = read_text_segments(file_path)
     
     browser = init_browser()
