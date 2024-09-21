@@ -26,11 +26,10 @@ async function extractTranscript() {
 }
 extractTranscript();
 
-
 function createOverlay() {
-  const videoPlayer = document.querySelector('.html5-video-player');
+  const videoPlayer = document.querySelector(".html5-video-player");
   if (!videoPlayer) {
-    console.error('Video player not found');
+    console.error("Video player not found");
     return;
   }
 
@@ -39,7 +38,7 @@ function createOverlay() {
     currentOverlay.remove();
   }
 
-  const overlay = document.createElement('div');
+  const overlay = document.createElement("div");
   overlay.style.cssText = `
     position: absolute;
     bottom: 60px;
@@ -51,22 +50,22 @@ function createOverlay() {
     border: 2px solid white;
   `;
 
-  const video = document.createElement('video');
+  const video = document.createElement("video");
   video.style.cssText = `
     width: 100%;
     height: 100%;
     object-fit: cover;
   `;
   video.autoplay = true;
-  video.src = 'https://www.w3schools.com/html/mov_bbb.mp4'; // Replace with the actual URL of your sign language video
+  video.src = ""; // Replace with the actual URL of your sign language video
 
   overlay.appendChild(video);
   videoPlayer.appendChild(overlay);
   currentOverlay = overlay; // Track the current overlay
 
   // Add a close button
-  const closeButton = document.createElement('button');
-  closeButton.textContent = 'X';
+  const closeButton = document.createElement("button");
+  closeButton.textContent = "X";
   closeButton.style.cssText = `
     position: absolute;
     top: 5px;
@@ -75,7 +74,7 @@ function createOverlay() {
     color: white;
     border: none;
     cursor: pointer;
-    z-index: 2147483648;
+    z-index: 2148;
   `;
   closeButton.onclick = () => {
     overlay.remove();
@@ -83,7 +82,7 @@ function createOverlay() {
   };
   overlay.appendChild(closeButton);
 
-  const youtubeVideo = document.querySelector('video.html5-main-video');
+  const youtubeVideo = document.querySelector("video.html5-main-video");
   if (youtubeVideo) {
     youtubeVideo.currentTime = 0; // Reset YouTube video to 0:00
     youtubeVideo.play(); // Play YouTube video
@@ -94,38 +93,38 @@ function createOverlay() {
   }
 
   // Synchronize play/pause functionality
-  video.addEventListener('play', () => {
+  video.addEventListener("play", () => {
     if (youtubeVideo.paused) {
       youtubeVideo.play();
     }
   });
 
-  video.addEventListener('pause', () => {
+  video.addEventListener("pause", () => {
     if (!youtubeVideo.paused) {
       youtubeVideo.pause();
     }
   });
 
-  youtubeVideo.addEventListener('play', () => {
+  youtubeVideo.addEventListener("play", () => {
     video.play();
   });
 
-  youtubeVideo.addEventListener('pause', () => {
+  youtubeVideo.addEventListener("pause", () => {
     video.pause();
   });
 
   // Close overlay when YouTube video ends
-  youtubeVideo.addEventListener('ended', () => {
+  youtubeVideo.addEventListener("ended", () => {
     overlay.remove();
     currentOverlay = null; // Clear reference
   });
 
   // Listen for changes in the YouTube player
   const observer = new MutationObserver(() => {
-    const newVideo = document.querySelector('video.html5-main-video');
+    const newVideo = document.querySelector("video.html5-main-video");
     if (newVideo && currentOverlay) {
-      const newVideoSrc = newVideo.getAttribute('src');
-      const oldVideoSrc = youtubeVideo.getAttribute('src');
+      const newVideoSrc = newVideo.getAttribute("src");
+      const oldVideoSrc = youtubeVideo.getAttribute("src");
       if (newVideoSrc !== oldVideoSrc) {
         // Stop overlay video and remove the overlay
         video.pause(); // Stop overlay video
@@ -137,17 +136,23 @@ function createOverlay() {
   });
 
   // Observe changes to the video player
-  observer.observe(videoPlayer, { attributes: true, childList: true, subtree: true });
+  observer.observe(videoPlayer, {
+    attributes: true,
+    childList: true,
+    subtree: true,
+  });
 }
 
 // Listen for messages from the popup
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === "extractTranscript") {
-    extractTranscript().then(transcript => sendResponse({transcript: transcript}));
+    extractTranscript().then((transcript) =>
+      sendResponse({ transcript: transcript })
+    );
     return true; // Indicates that the response is sent asynchronously
   } else if (request.action === "showOverlay") {
     createOverlay();
-    sendResponse({status: "Overlay created"});
+    sendResponse({ status: "Overlay created" });
   }
 });
 

@@ -1,14 +1,14 @@
 import threading
 from flask import Flask, request, jsonify, send_file, render_template, Response
-from text_audio import generate_audio_sync
 from flask_cors import CORS
-from pipeline.text_to_pose_scrapper import text_to_pose_scrapper, run_background_task
-
 import pickle
 import cv2
+import os
 import mediapipe as mp
 import numpy as np
 import time
+from text_audio import generate_audio_sync
+from pipeline.text_to_pose_scrapper import text_to_pose_scrapper, run_background_task
 
 app = Flask(__name__)
 CORS(app)
@@ -45,62 +45,58 @@ def receive_transcript():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
-# Convert to Audio:
-@app.route('/api/transcript/audio', methods=['POST'])
-def transcriptToaudio():
-    try:
-        # Get the JSON data from the request
-        data = request.get_json()
+@app.route('/api/sse')
+def sse(client_id):
+    def generate():
+        while True:
+            # Check if video processing is done for this client
+            if os.path.exists('final_video.mp4'):
+                # Video is ready, send the video URL to the client
+                # Upload to the vercel blobs
+                yield f"data: {"./final_video.mp4"}\n\n"
+                break  # End the SSE stream after sending the video URL
+            else:
+                # Send an update that the video is still processing
+                yield "data: Video still processing...\n\n"
+                time.sleep(5)  # Check every 5 seconds
 
-        # Extract the transcript from the data
-        transcript = data.get('transcript')
-
-        if transcript:
-            # Call the function to generate audio
-            generate_audio_sync(transcript, VOICES[1])
-
-            # Send the audio file back to the client
-            return send_file("test.mp3", mimetype='audio/mp3')
-        else:
-            return jsonify({"error": "No transcript provided"}), 400
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+    return Response(generate(), mimetype='text/event-stream')
+  
     
 @app.route('/api/download_video', methods=['GET'])
 def download_video_endpoint():
     try:
         # Assuming the video is saved as 'video_0.mp4' (or the last video processed)
-        return send_file("./video_0.mp4", mimetype='video/mp4', as_attachment=True)
+        return send_file("./final_video.mp4", mimetype='video/mp4', as_attachment=True)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-
-# Load the model
-model_dict = pickle.load(open('./model.p', 'rb'))
-model = model_dict['model']
-
-cap = cv2.VideoCapture(1)
-
-mp_hands = mp.solutions.hands
-mp_drawing = mp.solutions.drawing_utils
-mp_drawing_styles = mp.solutions.drawing_styles
-
-hands = mp_hands.Hands(static_image_mode=True, min_detection_confidence=0.3)
-
-# Define label dictionary
-labels_dict = {i: chr(65 + i) for i in range(26)}  # A-Z
-
-predicted_word = ""
-last_time = time.time()  # Timer to track the delay
-cooldown_time = 2  # Wait time (in seconds) between each letter recognition
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
-def generate_frames():
-    global predicted_word, last_time
+def generate_frames():    
+    global predicted_word, last_time    
+    # Load the model
+    model_dict = pickle.load(open('../pipeline/model.p', 'rb'))
+    model = model_dict['model']
 
+    cap = cv2.VideoCapture(1)
+
+    mp_hands = mp.solutions.hands
+    mp_drawing = mp.solutions.drawing_utils
+    mp_drawing_styles = mp.solutions.drawing_styles
+
+    hands = mp_hands.Hands(static_image_mode=True, min_detection_confidence=0.3)
+
+    # Define label dictionary
+    labels_dict = {i: chr(65 + i) for i in range(26)}  # A-Z
+
+    predicted_word = ""
+    last_time = time.time()  # Timer to track the delay
+    cooldown_time = 2  # Wait time (in seconds) between each letter recognition
+    
     while True:
         data_aux = []
         x_ = []

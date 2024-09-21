@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
+from pipeline import merge_pose_videos
 import time
 import requests
 
@@ -69,4 +70,5 @@ def text_to_pose_scrapper():
 def run_background_task():
     print("Starting background task for text-to-pose scrapper...")
     text_to_pose_scrapper()
+    merge_pose_videos('./')
     print("Background task completed.")

@@ -14,9 +14,8 @@ output_folder_path = './frames/final'
 def pipeline():
     # Convert the transcript file into pose video
     text_to_pose_scrapper()
-    # merge_pose_videos('./')
-    # extract_images_from_pose_video('hello.mp4')
-    # cropImage()
+    merge_pose_videos('./')
+    extract_images_from_pose_video('final_video.mp4')    
     process_folder(input_folder_path, output_folder_path)
     create_video()
 
