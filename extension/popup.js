@@ -20,17 +20,14 @@ document.getElementById("extract").addEventListener("click", async () => {
             chrome.tabs.sendMessage(tab.id, { action: "showOverlay" });
           }, 8000);
         }
-          }
-        //   if (success) {
-        //     chrome.tabs.sendMessage(tab.id, { action: "showOverlay" });
-        //   }
-        // } else {
-        //   console.error("Failed to extract transcript:", transcriptResponse.transcript);
-        // }
+          // if (success) {
+          //   chrome.tabs.sendMessage(tab.id, { action: "showOverlay" });
+          // } else {
+          //   console.error("Failed to extract transcript:", transcriptResponse.transcript);
+          // }
       });
     }
   );
-});
 
 async function sendTranscriptToServer(transcript) {
   try {
@@ -143,9 +140,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 });
+});
 
 // popup.js
 document.getElementById('askQuestionButton').addEventListener('click', function() {
-  document.querySelector('.popup').style.display = 'none'; // Hide popup
-  document.querySelector('.camera').style.display = 'block'; // Show camera
+document.querySelector('.popup').style.display = 'none'; // Hide popup
+document.querySelector('.camera').style.display = 'block'; // Show camera
 });
