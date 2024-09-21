@@ -55,19 +55,23 @@ def receive_transcript():
         return jsonify({"error": str(e)}), 500
     
 @app.route('/api/sse')
-def sse(client_id):
+def sse():
     def generate():
         while True:
             # Check if video processing is done for this client
             if os.path.exists('final_video.mp4'):
                 # Video is ready, send the video URL to the client
                 # Upload to the vercel blobs
+                
+                
                 yield f"data: {"./final_video.mp4"}\n\n"
+                print("yield done video is ready")
                 break  # End the SSE stream after sending the video URL
             else:
                 # Send an update that the video is still processing
                 yield "data: Video still processing...\n\n"
                 time.sleep(5)  # Check every 5 seconds        
+    return Response(generate(), mimetype="text/event-stream")
 
     
 @app.route('/api/download_video', methods=['GET'])
