@@ -13,18 +13,18 @@ document.getElementById("extract").addEventListener("click", async () => {
       // Request the transcript after executing content.js
       chrome.tabs.sendMessage(tab.id, { action: "extractTranscript" }, async (transcriptResponse) => {
         if (transcriptResponse && transcriptResponse.transcript) {
-          // const success = await sendTranscriptToServer(transcriptResponse.transcript); // Send transcript to the server
+          const success = await sendTranscriptToServer(transcriptResponse.transcript); // Send transcript to the server
           
           // Create the overlay only if sending the transcript was successful
           setTimeout(() => {
             chrome.tabs.sendMessage(tab.id, { action: "showOverlay" });
           }, 8000);
         }
-          // if (success) {
-          //   chrome.tabs.sendMessage(tab.id, { action: "showOverlay" });
-          // } else {
-          //   console.error("Failed to extract transcript:", transcriptResponse.transcript);
-          // }
+          if (success) {
+            chrome.tabs.sendMessage(tab.id, { action: "showOverlay" });
+          } else {
+            console.error("Failed to extract transcript:", transcriptResponse.transcript);
+          }
       });
     }
   );
@@ -47,12 +47,38 @@ async function sendTranscriptToServer(transcript) {
 
     const responseData = await response.json();
     console.log("Successfully sent transcript to server:", responseData);
+    listenToSSE(); 
     return true; // Indicate success
   } catch (error) {
     console.error("Failed to send transcript to server:", error);
     return false; // Indicate failure
   }
 }
+
+function listenToSSE() {
+  console.log("sse")
+  // Create an EventSource to listen to the server updates
+  const eventSource = new EventSource(`http://localhost:5000/api/sse`);
+
+  eventSource.onmessage = function(event) {
+    console.log("SSE message received:", event.data);
+
+    // Check if the server indicates the video is ready
+    if (event.data.includes(".mp4")) {
+      console.log("Video is ready:", event.data);
+      
+      // To download the video using the src
+
+      
+      // Close the SSE connection once the video is ready and downloaded
+      eventSource.close();
+    } else {
+      // Log the processing status
+      console.log("Processing update:", event.data);
+    }
+  };
+
+
 document.addEventListener('DOMContentLoaded', async () => {
   const videoFeed = document.getElementById('video-feed');
   const videoContainer = document.getElementById('videoContainer');
