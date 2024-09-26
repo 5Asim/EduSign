@@ -79,7 +79,7 @@ def sse():
 def download_video_endpoint():
     try:
         # Assuming the video is saved as 'video_0.mp4' (or the last video processed)
-        return send_file("./final_video.mp4", mimetype='video/mp4', as_attachment=True)
+        return send_file("./pipeline/final_video.mp4", mimetype='video/mp4', as_attachment=True)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
