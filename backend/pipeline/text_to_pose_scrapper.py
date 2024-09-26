@@ -63,7 +63,10 @@ def text_to_pose_scrapper():
     segments = read_text_segments(file_path)
 
     current_folder = os.path.dirname(os.path.abspath(__file__))  # Get the current script's directory
-    browser = init_browser(current_folder)
+    # Change to the 'final_videos' folder
+    final_videos_folder = os.path.join(current_folder, 'final_videos')
+
+    browser = init_browser(final_videos_folder)
     
     for index, text in enumerate(segments):
         input_field = browser.find_element(By.XPATH, '//*[@id="desktop"]')
@@ -84,8 +87,8 @@ def run_background_task():
     merge_pose_videos(file_names)
     print("Background task completed.")
 
-# if __name__ == "__main__":
-#     file_names = [os.path.join('./final_videos', file) for file in os.listdir('./final_videos')]
-    # merge_pose_videos(file_names)
+if __name__ == "__main__":
+    file_names = [os.path.join('./final_videos', file) for file in os.listdir('./final_videos')]
+    merge_pose_videos(file_names)
 
     

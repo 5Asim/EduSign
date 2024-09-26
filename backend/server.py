@@ -1,6 +1,6 @@
 import threading
 from flask import Flask, request, jsonify, send_file, render_template, Response
-from pipeline.text_to_audio import generate_audio_sync
+
 from flask_cors import CORS
 from pipeline.text_to_pose_scrapper import run_background_task
 import os
@@ -65,7 +65,7 @@ def sse():
                 # Upload to the vercel blobs
                 
                 
-                yield f"data: {"./final_video.mp4"}\n\n"
+                yield f"data: ./final_video.mp4\n\n"
                 print("yield done video is ready")
                 break  # End the SSE stream after sending the video URL
             else:
@@ -109,25 +109,24 @@ def index():
 
 def generate_frames():    
     global predicted_word, last_time    
-    # Load the model
-    model_dict = pickle.load(open('../pipeline/model.p', 'rb'))
-    model = model_dict['model']
+    # # Load the model
+    # model_dict = pickle.load(open('../pipeline/model.p', 'rb'))
+    # model = model_dict['model']
 
-    cap = cv2.VideoCapture(1)
+    # cap = cv2.VideoCapture(1)
 
-    mp_hands = mp.solutions.hands
-    mp_drawing = mp.solutions.drawing_utils
-    mp_drawing_styles = mp.solutions.drawing_styles
+    # mp_hands = mp.solutions.hands
+    # mp_drawing = mp.solutions.drawing_utils
+    # mp_drawing_styles = mp.solutions.drawing_styles
 
-    hands = mp_hands.Hands(static_image_mode=True, min_detection_confidence=0.3)
+    # hands = mp_hands.Hands(static_image_mode=True, min_detection_confidence=0.3)
 
-    # Define label dictionary
-    labels_dict = {i: chr(65 + i) for i in range(26)}  # A-Z
+    # # Define label dictionary
+    # labels_dict = {i: chr(65 + i) for i in range(26)}  # A-Z
 
-    predicted_word = ""
-    last_time = time.time()  # Timer to track the delay
-    cooldown_time = 2  # Wait time (in seconds) between each letter recognition
-    
+    # predicted_word = ""
+    # last_time = time.time()  # Timer to track the delay
+    # cooldown_time = 2  # Wait time (in seconds) between each letter recognition
     while True:
         data_aux = []
         x_ = []
@@ -143,7 +142,10 @@ def generate_frames():
 
         results = hands.process(frame_rgb)
 
+        current_time = time.time()  # Get the current time
+
         if results.multi_hand_landmarks:
+            hand_detected = True  # Hand detected, set the flag to True
             hand_landmarks = results.multi_hand_landmarks[0]  # Only process the first hand
             mp_drawing.draw_landmarks(
                 frame,
@@ -165,13 +167,20 @@ def generate_frames():
                 data_aux.append(y_[i] - min(y_))
 
             if len(data_aux) == 42:  # Ensure the correct feature size
-                current_time = time.time()
                 if current_time - last_time > cooldown_time:
                     prediction = model.predict([np.asarray(data_aux)])
                     predicted_character = labels_dict[int(prediction[0])]
 
                     predicted_word += predicted_character
                     last_time = current_time
+
+        else:
+            hand_detected = False  # No hand detected
+
+        # If no hand has been detected for more than 1 second, add a space
+        if not hand_detected and current_time - last_time > 2:
+            predicted_word += " "  # Add a space
+            last_time = current_time  # Update last_time
 
         # Display the current word on the frame
         cv2.putText(frame, predicted_word, (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1.3, (0, 0, 255), 3, cv2.LINE_AA)
@@ -197,6 +206,26 @@ def get_word():
     global predicted_word
     print(f"Current predicted word: {predicted_word}")
     return jsonify({"predicted_word": predicted_word})
+
+@app.route('/api/transcript/audio', methods=['POST'])
+def transcriptToaudio():
+    try:
+        # Get the JSON data from the request
+        data = request.get_json()
+
+        # Extract the transcript from the data
+        transcript = data.get('transcript')
+
+        if transcript:
+            # Call the function to generate audio
+            generate_audio_sync(transcript, VOICES[1])
+
+            # Send the audio file back to the client
+            return send_file("test.mp3", mimetype='audio/mp3')
+        else:
+            return jsonify({"error": "No transcript provided"}), 400
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 # Run the server
 if __name__ == '__main__':

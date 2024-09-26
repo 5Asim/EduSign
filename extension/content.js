@@ -41,10 +41,10 @@ function createOverlay() {
   const overlay = document.createElement("div");
   overlay.style.cssText = `
     position: absolute;
-    bottom: 60px;
+    bottom: 30px;
     right: 20px;
     width: 320px;
-    height: 180px;
+    height: 250px;
     background-color: rgba(0, 0, 0, 0.7);
     z-index: 2147483647;
     border: 2px solid white;
@@ -57,7 +57,12 @@ function createOverlay() {
     object-fit: cover;
   `;
   video.autoplay = true;
-  video.src = "https://hlhziqtgrmweszli.public.blob.vercel-storage.com/hello-gvdayfIYVlXjlnLgfINVOUbzEW4sBv.mp4"; 
+  video.src = "https://hlhziqtgrmweszli.public.blob.vercel-storage.com/final_video%20(2)-vPgvRwxkpchqxRubj5JosM2hyoPN5Z.mp4?fbclid=IwZXh0bgNhZW0CMTEAAR2gNyw-mx_HiP12g6EKJ97zQ4-AaGt-m6a1IBOVdVgFBEmVha-7TG8CIv4_aem_l8Y20_QhWqpOR9fLe1R-MQ"; 
+<<<<<<< HEAD
+
+  video.playbackRate = 3.0;
+=======
+>>>>>>> 5c2fbe47fb77411546a1af4be32d37c156c3e530
 
   overlay.appendChild(video);
   videoPlayer.appendChild(overlay);
