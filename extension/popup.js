@@ -1,6 +1,6 @@
 document.getElementById("extract").addEventListener("click", async () => {
   const loadingScreen = document.getElementById("loading-screen");
-  loadingScreen.style.display = 'block'; // Show loading screen
+  loadingScreen.style.display = "block"; // Show loading screen
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
   // Execute content.js to set up the page
@@ -33,23 +33,33 @@ document.getElementById("extract").addEventListener("click", async () => {
           }
         }
       );
-      chrome.tabs.sendMessage(tab.id, { action: "extractTranscript" }, async (transcriptResponse) => {
-        if (transcriptResponse && transcriptResponse.transcript) {
-          const success = await sendTranscriptToServer(transcriptResponse.transcript); // Send transcript to the server
-          
-          // Create the overlay only if sending the transcript was successful
-          setTimeout(() => {
-            chrome.tabs.sendMessage(tab.id, { action: "showOverlay" });
-          }, 8000);
-        }
+      chrome.tabs.sendMessage(
+        tab.id,
+        { action: "extractTranscript" },
+        async (transcriptResponse) => {
+          if (transcriptResponse && transcriptResponse.transcript) {
+            const success = await sendTranscriptToServer(
+              transcriptResponse.transcript
+            ); // Send transcript to the server
+
+            // Create the overlay only if sending the transcript was successful
+            setTimeout(() => {
+              chrome.tabs.sendMessage(tab.id, { action: "showOverlay" });
+            }, 8000);
+          }
           if (success) {
             chrome.tabs.sendMessage(tab.id, { action: "showOverlay" });
           } else {
-            console.error("Failed to extract transcript:", transcriptResponse.transcript);
+            console.error(
+              "Failed to extract transcript:",
+              transcriptResponse.transcript
+            );
           }
-      });
+        }
+      );
     }
   );
+});
 
 async function sendTranscriptToServer(transcript) {
   try {
@@ -66,10 +76,10 @@ async function sendTranscriptToServer(transcript) {
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
-    
+
     const responseData = await response.json();
     console.log("Successfully sent transcript to server:", responseData);
-    
+
     await listenToSSE();
     return true; // Indicate success
   } catch (error) {
